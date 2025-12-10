@@ -16,6 +16,11 @@ class Program
         bool exit = false;
         while (!exit)
         {
+            // --- Display Level, Title, Achievements ---
+            Console.WriteLine($"\nLevel: {GetLevel()} - Title: {GetTitle()}");
+            ShowAchievements();
+
+            // --- Menu ---
             Console.WriteLine("\n--- Eternal Quest Menu ---");
             Console.WriteLine("1. Create Goal");
             Console.WriteLine("2. Record Event");
@@ -35,6 +40,29 @@ class Program
                 default: Console.WriteLine("Invalid choice."); break;
             }
         }
+    }
+
+    // --- Gamification Methods ---
+    static int GetLevel() => totalScore / 500 + 1;
+
+    static string GetTitle()
+    {
+        if (totalScore >= 1500) return "Eternal Champion";
+        if (totalScore >= 1000) return "Ninja Unicorn";
+        if (totalScore >= 500) return "Novice Hero";
+        return "Apprentice";
+    }
+
+    static void ShowAchievements()
+    {
+        int checklistCompleted = 0;
+        foreach (var goal in goals)
+            if (goal is ChecklistGoal cg && cg.IsGoalComplete) checklistCompleted++;
+
+        Console.WriteLine("--- Achievements ---");
+        if (checklistCompleted >= 1) Console.WriteLine("✔ First Checklist Completed!");
+        if (checklistCompleted >= 5) Console.WriteLine("✔ Five Checklist Goals Completed!");
+        if (totalScore >= 1000) Console.WriteLine("✔ 1000 Points Achieved!");
     }
 
     // --- Create a new goal ---
@@ -86,7 +114,11 @@ class Program
             index -= 1;
             if (index >= 0 && index < goals.Count)
             {
+                int oldLevel = GetLevel();
                 totalScore += goals[index].RecordEvent();
+                int newLevel = GetLevel();
+                if (newLevel > oldLevel)
+                    Console.WriteLine($"🎉 Congratulations! You leveled up to Level {newLevel}!");
             }
             else
             {
@@ -146,7 +178,7 @@ class Program
                 case "Simple":
                     SimpleGoal sg = new SimpleGoal(parts[1], int.Parse(parts[2]));
                     if (bool.Parse(parts[3]))
-                        sg.RecordEvent(); // mark as complete once
+                        sg.RecordEvent();
                     goals.Add(sg);
                     break;
 
