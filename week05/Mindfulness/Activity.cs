@@ -47,7 +47,7 @@ abstract class Activity
         while (true)
         {
             Console.Write("\nEnter duration in seconds: ");
-            string? input = Console.ReadLine();
+            string input = Console.ReadLine();
             if (int.TryParse(input, out int secs) && secs > 0)
             {
                 return secs;

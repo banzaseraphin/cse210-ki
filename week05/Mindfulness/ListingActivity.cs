@@ -65,9 +65,9 @@ class ListingActivity : Activity
         }
     }
 
-    private static string? ReadLineWithTimeout(int timeoutMs)
+    private static string ReadLineWithTimeout(int timeoutMs)
     {
-        string? result = null;
+        string result = null;
         Thread inputThread = new Thread(() =>
         {
             try
